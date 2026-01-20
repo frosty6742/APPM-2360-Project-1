@@ -1,0 +1,74 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\title{Your Document Title}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\tableofcontents
+
+\section{Text Formatting}
+
+\subsection{Basic Formatting}
+\textbf{Bold text}, \textit{italic text}, \underline{underlined text}, \texttt{monospace}
+
+\subsection{Lists}
+\begin{itemize}
+    \item First item
+    \item Second item
+\end{itemize}
+
+\begin{enumerate}
+    \item Numbered item
+    \item Another item
+\end{enumerate}
+
+\section{Math}
+
+\subsection{Inline Math}
+Inline equation: $E = mc^2$
+
+\subsection{Display Math}
+\[
+    \int_a^b f(x) \, dx = F(b) - F(a)
+\]
+
+\begin{equation}
+    \frac{a}{b}, \sqrt{x}, x^2, x_i, \sum_{i=1}^{n} x_i
+\end{equation}
+
+\section{Figures and Tables}
+
+\begin{figure}[h]
+    \includegraphics[width=0.5\textwidth]{image.png}
+    \caption{Figure caption}
+\end{figure}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|}
+        \hline
+        Header 1 & Header 2 \\
+        \hline
+        Data 1 & Data 2 \\
+        \hline
+    \end{tabular}
+    \caption{Table caption}
+\end{table}
+
+\section{References}
+\cite{reference_key}
+
+\begin{thebibliography}{99}
+    \bibitem{reference_key} Author, Title, Journal, Year
+\end{thebibliography}
+
+\end{document}
