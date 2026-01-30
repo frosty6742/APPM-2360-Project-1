@@ -1,7 +1,11 @@
 %../APPM2360/Project01/proj1.m
 
+s = settings;
+s.matlab.appearance.figure.GraphicsTheme.TemporaryValue = "light";
+
+
 function A = equation01(t, r, n, A0)
-    A = A0 * (1 + r/n)^(n*t);
+    A = A0 * (1 + r/n).^(n*t);
 end
 
 function A = equation02(t, r, A0)
@@ -16,12 +20,31 @@ end
 ns = [1 2 4 12]; %number compounds per year
 comp_n = zeros(size(ns));
 
+% total cost after 5 years
 for i = 1:length(ns)
     comp_n(i) = equation01(5, 0.03, ns(i), 750000);
 end
 
+fprintf('Tot cost after 5 years:\n');
+for i = 1:length(ns)
+    fprintf('  n=%d: $%.2f\n', ns(i), comp_n(i));
+end
+fprintf('  Continuous: $%.2f\n\n', equation02(5, 0.03, 750000));
 
+% Plot for 0 <= t <= 30 years
+t = 0:0.1:30; % time in years
 
+figure;
+plot(t, equation01(t, 0.03, 4, 750000), 'b-', 'LineWidth', 2);
+hold on;
+plot(t, equation01(t, 0.03, 12, 750000), 'g-', 'LineWidth', 2);
+plot(t, equation02(t, 0.03, 750000), 'r-', 'LineWidth', 2);
+
+xlabel('Time (years)');
+ylabel('Loan Value ($)');
+title('Loan Value: Compounded 4x/year, 12x/year, and Continuously');
+legend('n=4', 'n=12', 'Continuous');
+grid on;
 
 
 %{
