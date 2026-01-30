@@ -1,4 +1,28 @@
-%3.1
+%../APPM2360/Project01/proj1.m
+
+function A = equation01(t, r, n, A0)
+    A = A0 * (1 + r/n)^(n*t);
+end
+
+function A = equation02(t, r, A0)
+    A = A0*exp(r*t);
+end
+
+function dAdt = equation03(r, A, p, A0)
+    dAdt = r*A - 12*p;
+end
+
+%1. 
+ns = [1 2 4 12]; %number compounds per year
+comp_n = zeros(size(ns));
+
+for i = 1:length(ns)
+    comp_n(i) = equation01(5, 0.03, ns(i), 750000);
+end
+
+
+
+
 
 %{
 #1 
