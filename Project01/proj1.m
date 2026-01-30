@@ -3,6 +3,11 @@
 s = settings;
 s.matlab.appearance.figure.GraphicsTheme.TemporaryValue = "light";
 
+function ex = exportGraph(name, figure)
+    plotsFolder = 'Project01/plots';
+    pdfFilename = fullfile(plotsFolder, [name, '.pdf']);
+    exportgraphics(figure, pdfFilename, 'ContentType', 'vector');
+end
 
 function A = equation01(t, r, n, A0)
     A = A0 * (1 + r/n).^(n*t);
@@ -16,7 +21,15 @@ function dAdt = equation03(r, A, p, A0)
     dAdt = r*A - 12*p;
 end
 
-%1. 
+%{
+#1 
+Examine the effect of continuous compounding on the value of a loan. Assuming that the interest rate is 3% (r = 0.03) and
+the original loan is $750,000, compute the total cost of the loan after 5 years for loans compounded 1, 2, 4, and 12 times per
+year, without any payments, using Equation (1). Use Equation (2) to compare these values to the value of the loan compounded
+continuously. On the same graph, plot the value of the loan as a function of time compounded 4 times a year and 12 times a year
+as well as the value of the loan when the interest is compounded continuously for 0 ≤ t ≤ 30 years.
+%}
+
 ns = [1 2 4 12]; %number compounds per year
 comp_n = zeros(size(ns));
 
@@ -34,7 +47,7 @@ fprintf('  Continuous: $%.2f\n\n', equation02(5, 0.03, 750000));
 % Plot for 0 <= t <= 30 years
 t = 0:0.1:30; % time in years
 
-figure;
+f = figure;
 plot(t, equation01(t, 0.03, 4, 750000), 'b-', 'LineWidth', 2);
 hold on;
 plot(t, equation01(t, 0.03, 12, 750000), 'g-', 'LineWidth', 2);
@@ -46,14 +59,17 @@ title('Loan Value: Compounded 4x/year, 12x/year, and Continuously');
 legend('n=4', 'n=12', 'Continuous');
 grid on;
 
+exportGraph('3.1.1', f);
+
 
 %{
-#1 
-Examine the effect of continuous compounding on the value of a loan. Assuming that the interest rate is 3% (r = 0.03) and
-the original loan is $750,000, compute the total cost of the loan after 5 years for loans compounded 1, 2, 4, and 12 times per
-year, without any payments, using Equation (1). Use Equation (2) to compare these values to the value of the loan compounded
-continuously. On the same graph, plot the value of the loan as a function of time compounded 4 times a year and 12 times a year
-as well as the value of the loan when the interest is compounded continuously for 0 ≤ t ≤ 30 years.
+Tot cost after 5 years:
+  n=1: $869455.56
+  n=2: $870405.62
+  n=4: $870888.11
+  n=12: $871212.59
+  Continuous: $871375.68%}
+
 %}
 
 %{
@@ -61,6 +77,9 @@ as well as the value of the loan when the interest is compounded continuously fo
 Next, gain a broad understanding of the behavior of the loan value by determining whether there any equilibrium solutions to Eq.
 (3). If so, what are they, and what is their stability? What do these equilibria represent in real-world terms?
 %}
+
+
+
 
 %{
 #3
