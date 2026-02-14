@@ -239,3 +239,75 @@ exportGraph('3.2.3', f);
 
 
     % 4. Plot the numerical solution A(t) for both scenarios on the same graph. How does the variable interest rate affect the graph, compared to the fixed rate? How do the different payment sizes affect the graph?
+
+
+% 3.2.2 Adjustable rate mortgage (Euler h=0.01)
+% r(t)=0.03 for t<=5
+% r(t)=0.03 + 0.015*sqrt(t-5) for t>5
+
+A0 = 750000;
+h  = 0.01;
+
+% Scenario 1: p = 4000   
+p1 = 4000;
+
+tA = 0;
+AA = A0;
+interestA = 0;
+
+k = 1;
+while AA(k) >= 0 && tA(k) < maxYears
+    if tA(k) <= 5
+        rk = 0.03;
+    else
+        rk = 0.03 + 0.015*sqrt(tA(k) - 5);
+    end
+
+    interestA = interestA + h*(rk*AA(k));           % interest accumulated
+    tA(k+1) = tA(k) + h;
+    AA(k+1) = AA(k) + h*(rk*AA(k) - 12*p1);         % Euler step
+    k = k + 1;
+end
+
+tpay_p4000 = tA(end);
+
+% Scenario 2: p = 4500   
+p2 = 4500;
+
+tB = 0;
+AB = A0;
+interestB = 0;
+
+k = 1;
+while AB(k) >= 0 && tB(k) < maxYears
+    if tB(k) <= 5
+        rk = 0.03;
+    else
+        rk = 0.03 + 0.015*sqrt(tB(k) - 5); 
+    end
+
+    interestB = interestB + h*(rk*AB(k));
+    tB(k+1) = tB(k) + h;
+    AB(k+1) = AB(k) + h*(rk*AB(k) - 12*p2);
+    k = k + 1;
+end
+
+tpay_p4500 = tB(end);
+
+fprintf('ARM (Euler h=%.2f):\n', h);
+fprintf('  p=$%d payoff ~ %.2f years, interest paid ~ $%.2f\n', p1, tpay_p4000, interestA);
+fprintf('  p=$%d payoff ~ %.2f years, interest paid ~ $%.2f\n', p2, tpay_p4500, interestB);
+
+
+f = figure;
+plot(tA, AA, 'LineWidth', 2,'Color', '#565A5C'); 
+hold on;
+plot(tB, AB, 'LineWidth', 2, 'Color', '#CFB87C');
+yline(0, 'k--');
+xlabel('t (years)'); ylabel('A(t) ($)');
+title('Adjustable rate mortgage: Euler h=0.01');
+legend(sprintf('p=$%d (payoff ~ %.2f yrs)', p1, tpay_p4000), ...
+       sprintf('p=$%d (payoff ~ %.2f yrs)', p2, tpay_p4500), ...
+       'Location', 'best');
+grid on; hold off;
+exportGraph('3.2.4', f);
