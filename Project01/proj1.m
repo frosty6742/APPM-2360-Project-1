@@ -5,7 +5,6 @@ s.matlab.appearance.figure.GraphicsTheme.TemporaryValue = "light";
 function exportGraph(name, figHandle)
     plotsFolder = 'Project01/plots';
 
-    % Create folder if it doesn't exist
     if ~exist(plotsFolder, 'dir')
         mkdir(plotsFolder);
     end
@@ -151,10 +150,6 @@ What are the advantages and disadvantages of taking out a 30-year fixed rate mor
 
 
 
-
-
-
-
 %Consider a mortgage for $750,000 with a constant interest rate of 5% (r = 0.05) and a monthly payment p = $4000.
 
     % 1. Implement Euler’s method for Eq. (3) with step size h = 0.5. Run the method until the mortgage is paid off and determine when it is paid off. Note: in reality, the mortgage is paid off when its value is zero. However, due to errors in the computations (both discretization and roundoff), it is likely that Euler’s method will not produce an exact value of 0 for the mortgage value for any time. To account for this, consider the mortgage to be paid off when its value first becomes negative.
@@ -183,6 +178,7 @@ while A(k) >= 0 && t(k) < maxYears
 end
 
 tpay_h05 = t(end);
+fprintf('Fixed rate (r=%.2f, p=$%.0f): Euler h=%.2f payoff ~ %.2f years\n', r, p, h, tpay_h05);
 
 % (2) Plot Euler and true solution together h=0.5
 A_true = (12*p)/r + (A0 - (12*p)/r).*exp(r*t);
@@ -263,9 +259,9 @@ while AA(k) >= 0 && tA(k) < maxYears
         rk = 0.03 + 0.015*sqrt(tA(k) - 5);
     end
 
-    interestA = interestA + h*(rk*AA(k));           % interest accumulated
+    interestA = interestA + h*(rk*AA(k));         
     tA(k+1) = tA(k) + h;
-    AA(k+1) = AA(k) + h*(rk*AA(k) - 12*p1);         % Euler step
+    AA(k+1) = AA(k) + h*(rk*AA(k) - 12*p1);
     k = k + 1;
 end
 
