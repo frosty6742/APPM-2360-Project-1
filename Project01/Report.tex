@@ -18,7 +18,7 @@
 \usepackage{graphicx}
 \usepackage[colorlinks=true, allcolors=blue]{hyperref}
 
-\title{Project 1 Report}
+\title{Project 1: How Much Does that House Really Cost?}
 \author{Owen Campbell, Jonas Morelli, Lucas Schultz}
 
 \begin{document}
@@ -72,6 +72,20 @@
         \subsubsection{}
         %3. Repeat the previous item for a step size h = 0.01 and comment on the difference
 
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\linewidth]{Project01//plots/3.2.2.pdf}
+            \caption{Euler vs True (h=0.5)}
+            \label{fig:3.2.2}
+        \end{figure}
+
+        \begin{figure}[H]
+            \centering
+            \includegraphics[width=0.75\linewidth]{Project01//plots/3.2.3.pdf}
+            \caption{Euler vs True (h=0.01)}
+            \label{fig:3.2.3}
+        \end{figure}
+
     \subsection{}
     %Now we turn to the adjustable rate mortgages. Suppose that for the same $750,000 mortgage a bank offers an adjustable rate mortgage, which starts with an initial lower fixed rate of 3% (r = 0.03) for the first 5 years and is tied to credit markets after that. Let’s assume that after the first 5 years the rate increases as r(t) = 0.03 + 0.015√t − 5, so
     
@@ -88,7 +102,9 @@
         \subsubsection{}
         % 4. Plot the numerical solution A(t) for both scenarios on the same graph. How does the variable interest rate affect the graph, compared to the fixed rate? How do the different payment sizes affect the graph?
 
-    
+  % ARM (Euler h=0.01):
+  % p=$4000 payoff ~ 34.90 years, interest paid ~ $924734.57
+  % p=$4500 payoff ~ 22.56 years, interest paid ~ $468098.10
 
 
 
