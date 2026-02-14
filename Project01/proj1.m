@@ -1,23 +1,31 @@
 %../APPM2360/Project01/proj1.m
-
 s = settings;
 s.matlab.appearance.figure.GraphicsTheme.TemporaryValue = "light";
 
-function ex = exportGraph(name, figure)
+function exportGraph(name, figHandle)
     plotsFolder = 'Project01/plots';
+
+    % Create folder if it doesn't exist
+    if ~exist(plotsFolder, 'dir')
+        mkdir(plotsFolder);
+    end
+
     pdfFilename = fullfile(plotsFolder, [name, '.pdf']);
-    exportgraphics(figure, pdfFilename, 'ContentType', 'vector');
+    exportgraphics(figHandle, pdfFilename, 'ContentType', 'vector');
 end
 
 function A = equation01(t, r, n, A0)
+    % Discrete compounding
     A = A0 * (1 + r/n).^(n*t);
 end
 
 function A = equation02(t, r, A0)
-    A = A0*exp(r*t);
+    % Continuous compounding
+    A = A0 * exp(r*t);
 end
 
 function dAdt = equation03(r, A, p, A0)
+    % Differential equation 
     dAdt = r*A - 12*p;
 end
 
@@ -30,24 +38,27 @@ continuously. On the same graph, plot the value of the loan as a function of tim
 as well as the value of the loan when the interest is compounded continuously for 0 ≤ t ≤ 30 years.
 %}
 
-ns = [1 2 4 12]; %number compounds per year
+ns = [1 2 4 12]; % number of compounds per year
 comp_n = zeros(size(ns));
 
-% total cost after 5 years
+% Total cost after 5 years
 for i = 1:length(ns)
     comp_n(i) = equation01(5, 0.03, ns(i), 750000);
 end
 
-fprintf('Tot cost after 5 years:\n');
+fprintf('Total cost after 5 years:\n');
 for i = 1:length(ns)
     fprintf('  n=%d: $%.2f\n', ns(i), comp_n(i));
 end
-fprintf('  Continuous: $%.2f\n\n', equation02(5, 0.03, 750000));
 
-% Plot for 0 <= t <= 30 years
-t = 0:0.1:30; % time in years
+continuous_value = equation02(5, 0.03, 750000);
+fprintf('  Continuous: $%.2f\n\n', continuous_value);
+
+% Plot for 0 to including 30 years
+t = 0:0.1:30;
 
 f = figure;
+
 plot(t, equation01(t, 0.03, 4, 750000), 'b-', 'LineWidth', 2);
 hold on;
 plot(t, equation01(t, 0.03, 12, 750000), 'g-', 'LineWidth', 2);
@@ -56,8 +67,11 @@ plot(t, equation02(t, 0.03, 750000), 'r-', 'LineWidth', 2);
 xlabel('Time (years)');
 ylabel('Loan Value ($)');
 title('Loan Value: Compounded 4x/year, 12x/year, and Continuously');
-legend('n=4', 'n=12', 'Continuous');
+
+legend('n = 4', 'n = 12', 'Continuous', 'Location', 'northwest');
+
 grid on;
+hold off;
 
 exportGraph('3.1.1', f);
 
@@ -79,13 +93,12 @@ Next, gain a broad understanding of the behavior of the loan value by determinin
 %}
 
 
-
-
 %{
 #3
 Determine the exact behavior of the loan in your friends’ situation by solving (3) with A(0) = A0 and r and p arbitrary. Be sure
 to show your work so that your friends are confident that you have the correct solution.
 %}
+
 
 %{
 #4
@@ -94,6 +107,27 @@ choose. Use the solution to (3) to find the correct p to pay off a 10-year fixed
 $750,000. Do the same for a 30-year fixed rate mortgage with an interest rate of 5%. Hint: you want to find p such that A(tl) = 0,
 were tl is the duration (years) of your mortgage. Find this analytically, not numerically using a root finding routine.
 %}
+A0 = 750000;
+
+% 10-year at 3%
+r1 = 0.03;
+t1 = 10;
+p1 = (A0*r1) / (12*(1 - exp(-r1*t1)));
+
+% 30-year at 5%
+r2 = 0.05;
+t2 = 30;
+p2 = (A0*r2) / (12*(1 - exp(-r2*t2)));
+
+fprintf('10-year @ 3%% monthly payment p = $%.2f\n', p1);
+fprintf('30-year @ 5%% monthly payment p = $%.2f\n', p2);
+
+% Optional: verify analytically that A(t_l)=0 using the closed form
+A_t1 = (12*p1)/r1 + (A0 - (12*p1)/r1)*exp(r1*t1);
+A_t2 = (12*p2)/r2 + (A0 - (12*p2)/r2)*exp(r2*t2);
+
+fprintf('Check A(t1)= %.6f (should be ~0)\n', A_t1);
+fprintf('Check A(t2)= %.6f (should be ~0)\n', A_t2);
 
 %{
 #5
