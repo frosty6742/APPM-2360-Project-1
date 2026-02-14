@@ -59,10 +59,10 @@ t = 0:0.1:30;
 
 f = figure;
 
-plot(t, equation01(t, 0.03, 4, 750000), 'b-', 'LineWidth', 2);
+plot(t, equation01(t, 0.03, 4, 750000), 'Color', '#CFB87C', 'LineWidth', 2);
 hold on;
-plot(t, equation01(t, 0.03, 12, 750000), 'g-', 'LineWidth', 2);
-plot(t, equation02(t, 0.03, 750000), 'r-', 'LineWidth', 2);
+plot(t, equation01(t, 0.03, 12, 750000), 'Color', '#A2A4A3', 'LineWidth', 2);
+plot(t, equation02(t, 0.03, 750000), 'Color', '#0A3758', 'LineWidth', 2);
 
 xlabel('Time (years)');
 ylabel('Loan Value ($)');
@@ -77,12 +77,12 @@ exportGraph('3.1.1', f);
 
 
 %{
-Tot cost after 5 years:
+Total cost after 5 years:
   n=1: $869455.56
   n=2: $870405.62
   n=4: $870888.11
   n=12: $871212.59
-  Continuous: $871375.68%}
+  Continuous: $871375.68
 
 %}
 
@@ -147,3 +147,95 @@ down on the house, i.e., the original loan amount was $650,000? Use the interest
 #7
 What are the advantages and disadvantages of taking out a 30-year fixed rate mortgage as opposed to a 10-year mortgage?
 %}
+
+
+
+
+
+
+
+
+%Consider a mortgage for $750,000 with a constant interest rate of 5% (r = 0.05) and a monthly payment p = $4000.
+
+    % 1. Implement Euler’s method for Eq. (3) with step size h = 0.5. Run the method until the mortgage is paid off and determine when it is paid off. Note: in reality, the mortgage is paid off when its value is zero. However, due to errors in the computations (both discretization and roundoff), it is likely that Euler’s method will not produce an exact value of 0 for the mortgage value for any time. To account for this, consider the mortgage to be paid off when its value first becomes negative.
+    
+
+    % 2. Plot the numerical solution A(t) and the true solution to Eq. (3) with the parameters given here on the same graph and compare the two. 
+    
+
+    %3. Repeat the previous item for a step size h = 0.01 and comment on the difference
+
+A0 = 750000;
+r  = 0.05;
+p  = 4000;
+
+% (1) Euler with h = 0.5 until payoff  
+h = 0.5;
+t = 0;
+A = A0;
+k = 1;
+maxYears = 200; 
+
+while A(k) >= 0 && t(k) < maxYears
+    t(k+1) = t(k) + h;
+    A(k+1) = A(k) + h*(r*A(k) - 12*p);
+    k = k + 1;
+end
+
+tpay_h05 = t(end);
+
+% (2) Plot Euler and true solution together h=0.5
+A_true = (12*p)/r + (A0 - (12*p)/r).*exp(r*t);
+
+f = figure;
+plot(t, A, 'LineWidth', 2, 'Color', '#565A5C'); hold on;
+plot(t, A_true, 'LineWidth', 2, 'Color', '#CFB87C');
+yline(0, 'k--');
+xlabel('t (years)'); ylabel('A(t) ($)');
+title(sprintf('Fixed rate: Euler vs True (h = %.2f)', h));
+legend('Euler', 'True', 'Location', 'best');
+grid on; hold off;
+exportGraph('3.2.2', f);
+
+% (3) Repeat for h=0.01  
+h = 0.01;
+t2 = 0;
+A2 = A0;
+k = 1;
+
+while A2(k) >= 0 && t2(k) < maxYears
+    t2(k+1) = t2(k) + h;
+    A2(k+1) = A2(k) + h*(r*A2(k) - 12*p);
+    k = k + 1;
+end
+
+tpay_h001 = t2(end);
+
+fprintf('Fixed rate (r=%.2f, p=$%.0f): Euler h=%.2f payoff ~ %.2f years\n\n', r, p, h, tpay_h001);
+
+A_true2 = (12*p)/r + (A0 - (12*p)/r).*exp(r*t2);
+
+f = figure;
+plot(t2, A2, 'LineWidth', 2, 'Color', '#565A5C'); hold on;
+plot(t2, A_true2, 'LineWidth', 2, 'Color', '#CFB87C');
+yline(0, 'k--');
+xlabel('t (years)'); ylabel('A(t) ($)');
+title(sprintf('Fixed rate: Euler vs True (h = %.2f)', h));
+legend('Euler', 'True', 'Location', 'best');
+grid on; hold off;
+exportGraph('3.2.3', f);
+
+
+%Now we turn to the adjustable rate mortgages. Suppose that for the same $750,000 mortgage a bank offers an adjustable rate mortgage, which starts with an initial lower fixed rate of 3% (r = 0.03) for the first 5 years and is tied to credit markets after that. Let’s assume that after the first 5 years the rate increases as r(t) = 0.03 + 0.015√t − 5, so
+%Use Euler’s method with h = 0.01 to answer the following.
+
+    % 1. Suppose your friends pay $4000 per month. How long will it take them to pay off the mortgage?
+
+
+    % 2. What about if they pay $4500 per month?
+
+
+    % 3. How much interest is paid in each case?
+
+
+    % 4. Plot the numerical solution A(t) for both scenarios on the same graph. How does the variable interest rate affect the graph, compared to the fixed rate? How do the different payment sizes affect the graph?
